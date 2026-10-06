@@ -73,24 +73,26 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 export function AppShell() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-background">
-      <aside className="fixed inset-y-0 left-0 hidden w-60 border-r lg:block">
+    <div className="min-h-dvh bg-background">
+      <aside className="fixed inset-y-0 left-0 hidden w-60 border-r bg-surface pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] lg:block">
         <SidebarContent />
       </aside>
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/95 px-4 lg:hidden">
+      <header className="sticky top-0 z-30 border-b bg-surface/95 pt-[env(safe-area-inset-top)] backdrop-blur lg:hidden">
+        <div className="flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-2 text-sm font-semibold"><WalletCards className="size-4 text-primary" />AliMPay</div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="ghost" size="icon" aria-label="打开导航" title="打开导航"><Menu /></Button>
           </DialogTrigger>
-          <DialogContent className="left-0 top-0 h-dvh w-72 max-w-none translate-x-0 translate-y-0 rounded-none border-y-0 border-l-0 p-0">
+          <DialogContent className="left-0 top-0 h-dvh max-h-none w-72 max-w-[86vw] translate-x-0 translate-y-0 rounded-none border-y-0 border-l-0 p-0 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
             <DialogTitle className="sr-only">后台导航</DialogTitle>
             <SidebarContent onNavigate={() => setOpen(false)} />
           </DialogContent>
         </Dialog>
+        </div>
       </header>
-      <main className="lg:pl-60">
-        <div className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <main className="pb-[env(safe-area-inset-bottom)] lg:pl-60">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
           <Outlet />
         </div>
       </main>

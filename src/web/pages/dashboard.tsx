@@ -57,7 +57,7 @@ export function DashboardPage() {
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_340px]">
         <Card>
-          <CardHeader className="flex-row items-center justify-between">
+          <CardHeader className="sm:flex-row sm:items-center sm:justify-between">
             <div><CardTitle>最近订单</CardTitle><CardDescription>状态每 5 秒刷新一次。</CardDescription></div>
             <Button asChild variant="ghost" size="sm"><Link to="/orders">查看全部</Link></Button>
           </CardHeader>
@@ -65,7 +65,22 @@ export function DashboardPage() {
             {data.recent_orders.length === 0 ? (
               <div className="py-12 text-center text-sm text-muted">还没有商户订单</div>
             ) : (
-              <div className="overflow-x-auto scrollbar-thin">
+              <>
+              <div className="space-y-3 md:hidden">
+                {data.recent_orders.map((order) => (
+                  <Link key={order.id} to={`/orders/${order.id}`} className="block rounded-xl border bg-background p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-medium">{order.name}</div>
+                        <div className="mt-1 break-all font-mono text-xs text-muted">{order.out_trade_no}</div>
+                      </div>
+                      <StatusBadge status={order.status} />
+                    </div>
+                    <div className="mt-3 text-sm font-mono font-medium">{formatMoney(order.requested_amount_cents)}</div>
+                  </Link>
+                ))}
+              </div>
+              <div className="hidden overflow-x-auto scrollbar-thin md:block">
                 <table className="w-full min-w-[680px] text-left text-sm">
                   <thead className="border-b text-xs text-muted"><tr><th className="pb-3 font-medium">商户订单号</th><th className="pb-3 font-medium">商品</th><th className="pb-3 font-medium">金额</th><th className="pb-3 font-medium">状态</th><th className="pb-3 text-right font-medium">创建时间</th></tr></thead>
                   <tbody className="divide-y">
@@ -81,6 +96,7 @@ export function DashboardPage() {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </CardContent>
         </Card>

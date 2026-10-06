@@ -62,7 +62,7 @@ export function OrderDetailPage() {
               <Field label="支付宝账务流水号" value={order.alipay_account_log_id ?? ""} mono /><Field label="支付宝订单号" value={order.alipay_order_no ?? ""} mono />
               <Field label="回调地址" value={order.notify_url} mono /><Field label="同步返回地址" value={order.return_url ?? ""} mono />
             </dl>
-            <div className="mt-5 flex gap-2"><CopyButton value={order.trade_no} label="复制平台单号" /><CopyButton value={order.out_trade_no} label="复制商户单号" /></div>
+            <div className="mt-5 flex flex-wrap gap-2"><CopyButton value={order.trade_no} label="复制平台单号" /><CopyButton value={order.out_trade_no} label="复制商户单号" /></div>
           </CardContent>
         </Card>
 

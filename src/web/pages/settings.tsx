@@ -111,7 +111,7 @@ function SettingsForm({ initial, refresh }: { initial: SettingsData; refresh: ()
                 id="transfer-link-layer"
                 value={transferLinkLayer}
                 onChange={(event) => setTransferLinkLayer(Number(event.target.value) as TransferLinkLayer)}
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                className="flex h-11 w-full rounded-lg border bg-surface px-3 py-1 text-base outline-none md:h-9 md:text-sm"
               >
                 <option value={1}>第 1 层 · 原始 alipays Scheme</option>
                 <option value={2}>第 2 层 · 单层支付宝 HTTPS（已验证可用）</option>

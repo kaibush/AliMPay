@@ -35,7 +35,7 @@ export function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-12">
+    <main className="flex min-h-dvh items-center justify-center px-4 py-[max(3rem,env(safe-area-inset-top))] pb-[max(3rem,env(safe-area-inset-bottom))]">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex items-center justify-center gap-3">
           <span className="flex size-9 items-center justify-center rounded-md bg-primary text-background"><WalletCards className="size-4" /></span>

@@ -45,7 +45,7 @@ export function OrdersPage() {
               <Button type="submit" variant="outline"><Search />搜索</Button>
             </form>
             <select
-              className="h-9 rounded-md border bg-transparent px-3 text-sm"
+              className="h-11 w-full rounded-lg border bg-surface px-3 text-base md:h-9 md:w-auto md:text-sm"
               value={status}
               onChange={(event) => { setStatus(event.target.value as OrderStatus | ""); setPage(1); }}
               aria-label="订单状态"
@@ -55,7 +55,25 @@ export function OrdersPage() {
           </div>
 
           {isLoading ? <Loading /> : !data?.data.length ? <div className="py-16 text-center text-sm text-muted">没有符合条件的订单</div> : (
-            <div className="overflow-x-auto scrollbar-thin">
+            <>
+            <div className="space-y-3 md:hidden">
+              {data.data.map((order) => (
+                <Link key={order.id} to={`/orders/${order.id}`} className="block rounded-xl border bg-background p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium">{order.name}</div>
+                      <div className="mt-1 break-all font-mono text-xs text-muted">{order.out_trade_no}</div>
+                    </div>
+                    <StatusBadge status={order.status} />
+                  </div>
+                  <div className="mt-3 flex items-end justify-between gap-3 text-sm">
+                    <span className="font-mono font-medium">{formatMoney(order.payable_amount_cents)}</span>
+                    <span className="text-xs text-muted">{formatDate(order.created_at)}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="hidden overflow-x-auto scrollbar-thin md:block">
               <table className="w-full min-w-[900px] text-left text-sm">
                 <thead className="border-b text-xs text-muted"><tr><th className="pb-3 font-medium">平台订单号</th><th className="pb-3 font-medium">商户订单号</th><th className="pb-3 font-medium">接口</th><th className="pb-3 font-medium">金额</th><th className="pb-3 font-medium">实付</th><th className="pb-3 font-medium">状态</th><th className="pb-3 text-right font-medium">创建时间</th></tr></thead>
                 <tbody className="divide-y">
@@ -73,6 +91,7 @@ export function OrdersPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
           <div className="mt-5 flex items-center justify-between border-t pt-4 text-sm text-muted">
             <span>共 {data?.total ?? 0} 笔</span>

@@ -42,7 +42,7 @@ export function SetupPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-10 sm:py-16">
+    <main className="min-h-dvh px-4 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:py-16">
       <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[1fr_440px] lg:items-center">
         <section className="max-w-xl">
           <div className="mb-8 flex items-center gap-3">
