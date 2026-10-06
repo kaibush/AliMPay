@@ -75,22 +75,24 @@ function SettingsForm({ initial, refresh }: { initial: SettingsData; refresh: ()
       <Card>
         <CardHeader><CardTitle>收款方式</CardTitle><CardDescription>经营码金额匹配更稳定；同一时刻的订单会分配不同分位金额。</CardDescription></CardHeader>
         <CardContent>
-          <div className="grid gap-3 md:grid-cols-2">
-            <button type="button" onClick={() => setMode("business_qr")} className={cn("rounded-lg border p-4 text-left transition-colors", mode === "business_qr" ? "border-primary bg-primary/5" : "hover:bg-foreground/[0.025]")}>
-              <div className="flex items-center justify-between"><span className="flex items-center gap-2 font-semibold"><QrCode className="size-4 text-primary" />经营码</span><Badge variant={mode === "business_qr" ? "primary" : "outline"}>{mode === "business_qr" ? "当前使用" : "推荐"}</Badge></div>
+          <div className="grid min-w-0 gap-3 md:grid-cols-2">
+            <button type="button" onClick={() => setMode("business_qr")} className={cn("min-w-0 rounded-lg border p-4 text-left transition-colors", mode === "business_qr" ? "border-primary bg-primary/5" : "hover:bg-foreground/[0.025]")}>
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2"><span className="flex items-center gap-2 font-semibold"><QrCode className="size-4 text-primary" />经营码</span><Badge variant={mode === "business_qr" ? "primary" : "outline"}>{mode === "business_qr" ? "当前使用" : "推荐"}</Badge></div>
               <p className="mt-2 text-sm leading-5 text-muted">上传支付宝经营码，订单实付金额在原价上增加 0.01–0.99 元并精确匹配。</p>
             </button>
-            <button type="button" onClick={() => setMode("transfer")} className={cn("rounded-lg border p-4 text-left transition-colors", mode === "transfer" ? "border-primary bg-primary/5" : "hover:bg-foreground/[0.025]")}>
-              <div className="flex items-center justify-between"><span className="flex items-center gap-2 font-semibold"><Send className="size-4 text-primary" />转账备注</span><Badge variant={mode === "transfer" ? "primary" : "outline"}>{mode === "transfer" ? "当前使用" : "兼容模式"}</Badge></div>
+            <button type="button" onClick={() => setMode("transfer")} className={cn("min-w-0 rounded-lg border p-4 text-left transition-colors", mode === "transfer" ? "border-primary bg-primary/5" : "hover:bg-foreground/[0.025]")}>
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2"><span className="flex items-center gap-2 font-semibold"><Send className="size-4 text-primary" />转账备注</span><Badge variant={mode === "transfer" ? "primary" : "outline"}>{mode === "transfer" ? "当前使用" : "兼容模式"}</Badge></div>
               <p className="mt-2 text-sm leading-5 text-muted">生成支付宝转账 URI，使用商户订单号作为 memo，同时校验金额与时间。</p>
             </button>
           </div>
 
-          <div className="mt-5 grid gap-5 md:grid-cols-2">
-            <div className="space-y-3">
+          <div className="mt-5 grid min-w-0 gap-5 md:grid-cols-2">
+            <div className="min-w-0 space-y-3">
               <Label htmlFor="qr-file">经营码图片</Label>
-              {initial.business_qr_url ? <div className="flex items-center gap-3 rounded-md border p-3"><img src={initial.business_qr_url} alt="已上传的支付宝经营码" className="size-20 object-contain" /><div className="min-w-0"><div className="flex items-center gap-2 text-sm font-medium"><CheckCircle2 className="size-4 text-success" />已上传</div><p className="mt-1 truncate text-xs text-muted">{initial.business_qr_url}</p></div></div> : <div className="rounded-md border border-dashed p-5 text-center text-sm text-muted">尚未上传经营码</div>}
-              <Input id="qr-file" type="file" accept="image/png,image/jpeg,image/webp" onChange={async (event) => {
+              {initial.business_qr_url ? <div className="flex min-w-0 items-center gap-3 overflow-hidden rounded-md border p-3"><img src={initial.business_qr_url} alt="已上传的支付宝经营码" className="size-20 shrink-0 object-contain" /><div className="min-w-0"><div className="flex items-center gap-2 text-sm font-medium"><CheckCircle2 className="size-4 text-success" />已上传</div><p className="mt-1 truncate text-xs text-muted">{initial.business_qr_url}</p></div></div> : <div className="rounded-md border border-dashed p-5 text-center text-sm text-muted">尚未上传经营码</div>}
+              <label className="relative flex h-11 w-full min-w-0 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg border bg-surface px-3 text-sm font-medium">
+                <Upload className="size-4 text-primary" />选择经营码图片
+                <input id="qr-file" type="file" accept="image/png,image/jpeg,image/webp" className="absolute inset-0 size-full cursor-pointer opacity-0" onChange={async (event) => {
                 const file = event.target.files?.[0];
                 if (!file) return;
                 const form = new FormData();
@@ -101,9 +103,10 @@ function SettingsForm({ initial, refresh }: { initial: SettingsData; refresh: ()
                   await refresh();
                 } catch (error) { toast.error(error instanceof Error ? error.message : "上传失败"); }
               }} />
-              <p className="flex items-start gap-2 text-xs leading-5 text-muted"><Upload className="mt-0.5 size-3.5 shrink-0" />支持 PNG、JPEG、WebP，最大 5MB。</p>
+              </label>
+              <p className="text-xs leading-5 text-muted">支持 PNG、JPEG、WebP，最大 5MB。</p>
             </div>
-            <div className="space-y-3">
+            <div className="min-w-0 space-y-3">
               <Label htmlFor="transfer-user">支付宝用户 ID</Label>
               <Input id="transfer-user" inputMode="numeric" value={transferUserId} onChange={(event) => setTransferUserId(event.target.value.trim())} placeholder="2088…" />
               <Label htmlFor="transfer-link-layer">转账链接包裹层级</Label>
@@ -111,7 +114,7 @@ function SettingsForm({ initial, refresh }: { initial: SettingsData; refresh: ()
                 id="transfer-link-layer"
                 value={transferLinkLayer}
                 onChange={(event) => setTransferLinkLayer(Number(event.target.value) as TransferLinkLayer)}
-                className="flex h-11 w-full rounded-lg border bg-surface px-3 py-1 text-base outline-none md:h-9 md:text-sm"
+                className="flex h-11 w-full min-w-0 max-w-full rounded-lg border bg-surface px-3 py-1 text-base outline-none md:h-9 md:text-sm"
               >
                 <option value={1}>第 1 层 · 原始 alipays Scheme</option>
                 <option value={2}>第 2 层 · 单层支付宝 HTTPS（已验证可用）</option>
@@ -126,7 +129,7 @@ function SettingsForm({ initial, refresh }: { initial: SettingsData; refresh: ()
       <Card>
         <CardHeader><CardTitle>支付宝 V3 账单接口</CardTitle><CardDescription>使用官方 Node SDK 发起 GET /v3/alipay/data/bill/accountlog/query，并校验响应签名。</CardDescription></CardHeader>
         <CardContent className="space-y-5">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid min-w-0 gap-5 md:grid-cols-2">
             <div className="space-y-2"><Label htmlFor="app-id">应用 ID</Label><Input id="app-id" value={appId} onChange={(event) => setAppId(event.target.value.trim())} placeholder="支付宝开放平台 AppId" /></div>
             <div className="space-y-2"><Label htmlFor="endpoint">V3 Endpoint</Label><Input id="endpoint" type="url" value={endpoint} onChange={(event) => setEndpoint(event.target.value)} /></div>
           </div>

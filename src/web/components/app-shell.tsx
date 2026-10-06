@@ -73,11 +73,11 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 export function AppShell() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="min-h-dvh bg-background">
+    <div className="min-h-dvh w-full max-w-full bg-background">
       <aside className="fixed inset-y-0 left-0 hidden w-60 border-r bg-surface pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] lg:block">
         <SidebarContent />
       </aside>
-      <header className="sticky top-0 z-30 border-b bg-surface/95 pt-[env(safe-area-inset-top)] backdrop-blur lg:hidden">
+      <header className="sticky inset-x-0 top-0 z-30 w-full border-b bg-surface pt-[env(safe-area-inset-top)] lg:hidden">
         <div className="flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-2 text-sm font-semibold"><WalletCards className="size-4 text-primary" />AliMPay</div>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -91,8 +91,8 @@ export function AppShell() {
         </Dialog>
         </div>
       </header>
-      <main className="pb-[env(safe-area-inset-bottom)] lg:pl-60">
-        <div className="mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+      <main className="w-full min-w-0 max-w-full pb-[env(safe-area-inset-bottom)] lg:pl-60">
+        <div className="mx-auto w-full min-w-0 max-w-[1440px] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
           <Outlet />
         </div>
       </main>
