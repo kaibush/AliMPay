@@ -46,11 +46,11 @@ export function createApp(services?: Partial<AppServices>) {
     referrerPolicy: "strict-origin-when-cross-origin",
     contentSecurityPolicy: getRuntimeEnv().nodeEnv === "production" ? {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://visora.lvyrix.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "blob:"],
       fontSrc: ["'self'"],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", "https://visora.lvyrix.com"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],

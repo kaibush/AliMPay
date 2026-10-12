@@ -1,9 +1,10 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import useSWR from "swr";
 import { ApiClientError, swrFetcher } from "@/web/api";
 import { AppShell } from "@/web/components/app-shell";
 import { Loading } from "@/web/components/ui/loading";
+import { syncVisoraUser } from "@/web/lib/visora";
 import { CheckoutPage } from "@/web/pages/checkout";
 import { DashboardPage } from "@/web/pages/dashboard";
 import { DocsPage } from "@/web/pages/docs";
@@ -15,12 +16,37 @@ import { SettingsPage } from "@/web/pages/settings";
 import { SetupPage } from "@/web/pages/setup";
 import { SystemPage } from "@/web/pages/system";
 
+type AdminMe = { user: { id: string; username: string } };
+
+function useAdminMe() {
+  return useSWR<AdminMe>("/admin-api/me", swrFetcher, { shouldRetryOnError: false });
+}
+
+function useVisoraAdminIdentity() {
+  const { data, error, isLoading } = useAdminMe();
+  useEffect(() => {
+    if (isLoading) return;
+    if (error instanceof ApiClientError && error.status === 401) {
+      syncVisoraUser(null);
+      return;
+    }
+    const user = data?.user;
+    if (!user) return;
+    syncVisoraUser({ id: user.id || user.username, name: user.username });
+  }, [data, error, isLoading]);
+}
+
 function RequireAdmin({ children }: { children: ReactNode }) {
-  const { data, error, isLoading } = useSWR<{ user: { username: string } }>("/admin-api/me", swrFetcher, { shouldRetryOnError: false });
+  const { data, error, isLoading } = useAdminMe();
   if (isLoading) return <Loading label="正在验证会话" />;
   if (error instanceof ApiClientError && error.status === 401) return <Navigate to="/login" replace />;
   if (error || !data) return <Navigate to="/login" replace />;
   return children;
+}
+
+function LoginRoute() {
+  useAdminMe();
+  return <LoginPage />;
 }
 
 function Home() {
@@ -30,11 +56,12 @@ function Home() {
 }
 
 export function App() {
+  useVisoraAdminIdentity();
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/setup" element={<SetupPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<LoginRoute />} />
       <Route path="/checkout/:token" element={<CheckoutPage />} />
       <Route element={<RequireAdmin><AppShell /></RequireAdmin>}>
         <Route path="/dashboard" element={<DashboardPage />} />
