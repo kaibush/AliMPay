@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" class="bg-background">
+<html lang="zh-CN" class="bg-background" data-visora-site="%VITE_VISORA_SITE_ID%" data-visora-base="%VITE_VISORA_URL%">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -15,20 +15,7 @@
     <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png" />
     <title>AliMPay</title>
-    <script>
-      ;(function () {
-        var site = '%VITE_VISORA_SITE_ID%'
-        var base = '%VITE_VISORA_URL%'
-        if (!site || site.charAt(0) === '%' || !base || base.charAt(0) === '%')
-          return
-        var script = document.createElement('script')
-        script.defer = true
-        script.src = base.replace(/\/$/, '') + '/tracker.js'
-        script.setAttribute('data-site', site)
-        script.setAttribute('data-wait-for-user', 'true')
-        document.head.appendChild(script)
-      })()
-    </script>
+    <script defer src="/visora-loader.js"></script>
   </head>
   <body>
     <div id="root"></div>
