@@ -18,34 +18,42 @@ import { SystemPage } from "@/web/pages/system";
 
 type AdminMe = { user: { id: string; username: string } };
 
+async function fetchAdminMe() {
+  try {
+    return await swrFetcher<AdminMe>("/admin-api/me");
+  } catch (error) {
+    if (error instanceof ApiClientError && error.status === 401) return null;
+    throw error;
+  }
+}
+
 function useAdminMe() {
-  return useSWR<AdminMe>("/admin-api/me", swrFetcher, { shouldRetryOnError: false });
+  return useSWR<AdminMe | null>("/admin-api/me", fetchAdminMe, { shouldRetryOnError: false });
 }
 
 function useVisoraAdminIdentity() {
-  const { data, error, isLoading } = useAdminMe();
+  const { data, isLoading } = useAdminMe();
   useEffect(() => {
     if (isLoading) return;
-    if (error instanceof ApiClientError && error.status === 401) {
+    const user = data?.user;
+    if (!user) {
       syncVisoraUser(null);
       return;
     }
-    const user = data?.user;
-    if (!user) return;
     syncVisoraUser({ id: user.id || user.username, name: user.username });
-  }, [data, error, isLoading]);
+  }, [data, isLoading]);
 }
 
 function RequireAdmin({ children }: { children: ReactNode }) {
   const { data, error, isLoading } = useAdminMe();
   if (isLoading) return <Loading label="正在验证会话" />;
-  if (error instanceof ApiClientError && error.status === 401) return <Navigate to="/login" replace />;
-  if (error || !data) return <Navigate to="/login" replace />;
+  if (error || !data?.user) return <Navigate to="/login" replace />;
   return children;
 }
 
 function LoginRoute() {
-  useAdminMe();
+  const { data } = useAdminMe();
+  if (data?.user) return <Navigate to="/dashboard" replace />;
   return <LoginPage />;
 }
 

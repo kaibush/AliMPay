@@ -94,6 +94,10 @@ function imageType(buffer: Uint8Array) {
 
 export function createAdminRoutes(database: AppDatabase, scanner: PaymentScanner) {
   const app = new Hono<{ Variables: AuthVariables }>();
+  app.use("*", async (c, next) => {
+    await next();
+    c.header("cache-control", "no-store");
+  });
 
   app.get("/setup/status", (c) => c.json({ setup_completed: setupCompleted(database) }));
 

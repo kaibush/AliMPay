@@ -32,7 +32,11 @@ export function SetupPage() {
     try {
       await apiFetch("/admin-api/setup", { method: "POST", ...jsonBody({ password, public_base_url: baseUrl }) });
       await mutate("/admin-api/setup/status");
-      await mutate("/admin-api/me");
+      const session = await mutate<{ user?: { username: string } } | null>("/admin-api/me");
+      if (!session?.user) {
+        setError("初始化已完成，但登录状态未生效，请重新登录");
+        return;
+      }
       navigate("/dashboard", { replace: true });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "初始化失败");

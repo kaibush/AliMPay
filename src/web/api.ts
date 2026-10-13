@@ -25,7 +25,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
     headers.set("x-csrf-token", decodeURIComponent(cookie("alimpay_csrf")));
   }
-  const response = await fetch(path, { ...init, method, headers, credentials: "same-origin" });
+  const response = await fetch(path, { ...init, method, headers, credentials: "same-origin", cache: "no-store" });
   const contentType = response.headers.get("content-type") ?? "";
   const payload = contentType.includes("application/json") ? await response.json() : await response.text();
   if (!response.ok) {

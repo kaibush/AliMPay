@@ -25,7 +25,11 @@ export function LoginPage() {
     setSubmitting(true);
     try {
       await apiFetch("/admin-api/login", { method: "POST", ...jsonBody({ username: username.trim(), password }) });
-      await mutate("/admin-api/me");
+      const session = await mutate<{ user?: { username: string } } | null>("/admin-api/me");
+      if (!session?.user) {
+        setError("登录未完成，请再试一次");
+        return;
+      }
       navigate("/dashboard", { replace: true });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "登录失败");
